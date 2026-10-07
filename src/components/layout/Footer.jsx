@@ -106,7 +106,6 @@ const Footer = () => {
                 { label: 'Our Approach', to: '/approach' },
                 { label: 'Why Shriyam', to: '/about' },
                 { label: 'Who We Serve', to: '/industries' },
-                { label: 'Our Directors', to: '/leadership' },
                 { label: 'Contact Us', to: '/contact' },
               ].map((item, i) => (
                 <FooterLink key={i} to={item.to} index={i}>{item.label}</FooterLink>
