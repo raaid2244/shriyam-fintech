@@ -162,13 +162,13 @@ const Footer = () => {
               </li>
               <li>
                 <a href="mailto:contact@shriyamfintech.com" className="flex items-center hover:text-white transition-colors group">
-                  <Mail size={18} className="mr-3 text-[#0A9B73] group-hover:scale-110 transition-transform" />
+                  <Mail size={18} className="mr-3 text-[#0A9B73] shrink-0 group-hover:scale-110 transition-transform" />
                   contact@shriyamfintech.com
                 </a>
               </li>
               <li>
                 <a href="https://www.shriyamfintech.com" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-white transition-colors group">
-                  <Globe size={18} className="mr-3 text-[#0A9B73] group-hover:scale-110 transition-transform" />
+                  <Globe size={18} className="mr-3 text-[#0A9B73] shrink-0 group-hover:scale-110 transition-transform" />
                   www.shriyamfintech.com
                 </a>
               </li>
