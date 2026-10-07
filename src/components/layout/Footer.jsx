@@ -104,7 +104,7 @@ const Footer = () => {
               {[
                 { label: 'About Shriyam', to: '/about' },
                 { label: 'Our Approach', to: '/approach' },
-                { label: 'Why Shriyam', to: '/about' },
+                { label: 'Our Solution', to: '/solutions' },
                 { label: 'Who We Serve', to: '/industries' },
                 { label: 'Contact Us', to: '/contact' },
               ].map((item, i) => (
