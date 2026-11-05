@@ -509,50 +509,87 @@ Consent to Contact: ${corporateState.consent ? 'Yes' : 'No'}
     };
 
     if (activeTab === 'general') {
+      const summaryMessage = 
+        `Inquiry Category: General Insurance\n` +
+        `Full Name: ${generalState.name}\n` +
+        `Mobile Number: ${generalState.phone}\n` +
+        `Email: ${generalState.email || 'Not provided'}\n` +
+        `Customer Type: ${generalState.customerType}\n` +
+        `Company Name: ${generalState.company || 'N/A'}\n` +
+        `Insurance Required: ${generalState.insuranceType}\n` +
+        `Approx Asset Value: ${generalState.assetValue}\n` +
+        `Inquiry Type: ${generalState.inquiryType}\n` +
+        `Expiry Date: ${generalState.expiryDate || 'N/A'}\n` +
+        `Requirements: ${generalState.requirements || 'None'}\n` +
+        `Reference ID: ${refCode}`;
+
       payload = {
         ...payload,
-        subject: `New General Insurance Inquiry: ${generalState.name || 'Visitor'} (${generalState.insuranceType})`,
-        replyto: generalState.email || undefined,
-        form_category: "General Insurance",
-        full_name: generalState.name,
-        phone_number: generalState.phone,
-        email_address: generalState.email || 'N/A',
+        name: generalState.name,
+        email: generalState.email || undefined,
+        phone: generalState.phone,
+        message: summaryMessage,
+        subject: `New General Insurance Inquiry: ${generalState.name} (${generalState.insuranceType})`,
         customer_type: generalState.customerType,
         company_name: generalState.company || 'N/A',
         insurance_type_required: generalState.insuranceType,
         approx_asset_value: generalState.assetValue,
         inquiry_type: generalState.inquiryType,
         policy_expiry_date: generalState.expiryDate || 'N/A',
-        additional_requirements: generalState.requirements || 'None',
-        consent_given: generalState.consent ? 'Yes' : 'No'
+        additional_requirements: generalState.requirements || 'None'
       };
     } else if (activeTab === 'life') {
+      const summaryMessage = 
+        `Inquiry Category: Life Insurance\n` +
+        `Full Name: ${lifeState.name}\n` +
+        `Mobile Number: ${lifeState.phone}\n` +
+        `Email: ${lifeState.email || 'Not provided'}\n` +
+        `Age: ${lifeState.age}\n` +
+        `Occupation: ${lifeState.occupation}\n` +
+        `Requirement: ${lifeState.requirement}\n` +
+        `Desired Life Cover: ${lifeState.desiredCover}\n` +
+        `Annual Budget: ${lifeState.budget}\n` +
+        `Financial Goal: ${lifeState.financialGoal}\n` +
+        `Additional Details: ${lifeState.additionalDetails || 'None'}\n` +
+        `Reference ID: ${refCode}`;
+
       payload = {
         ...payload,
-        subject: `New Life Insurance Inquiry: ${lifeState.name || 'Visitor'} (${lifeState.requirement})`,
-        replyto: lifeState.email || undefined,
-        form_category: "Life Insurance",
-        full_name: lifeState.name,
-        phone_number: lifeState.phone,
-        email_address: lifeState.email || 'N/A',
+        name: lifeState.name,
+        email: lifeState.email || undefined,
+        phone: lifeState.phone,
+        message: summaryMessage,
+        subject: `New Life Insurance Inquiry: ${lifeState.name} (${lifeState.requirement})`,
         age: lifeState.age,
         occupation: lifeState.occupation,
         life_insurance_requirement: lifeState.requirement,
         desired_life_cover: lifeState.desiredCover,
         annual_premium_budget: lifeState.budget,
         primary_financial_goal: lifeState.financialGoal,
-        additional_details: lifeState.additionalDetails || 'None',
-        consent_given: lifeState.consent ? 'Yes' : 'No'
+        additional_details: lifeState.additionalDetails || 'None'
       };
     } else if (activeTab === 'health') {
+      const summaryMessage = 
+        `Inquiry Category: Health Insurance\n` +
+        `Full Name: ${healthState.name}\n` +
+        `Mobile Number: ${healthState.phone}\n` +
+        `Email: ${healthState.email || 'Not provided'}\n` +
+        `Plan Type: ${healthState.healthType}\n` +
+        `Covered Members: ${healthState.adults} Adults, ${healthState.children} Children\n` +
+        `Age of Eldest Member: ${healthState.eldestAge || 'N/A'}\n` +
+        `Desired Sum Insured: ${healthState.sumInsured}\n` +
+        `Inquiry Type: ${healthState.inquiryType}\n` +
+        `Policy Expiry Date: ${healthState.expiryDate || 'N/A'}\n` +
+        `Additional Requirements: ${healthState.requirements || 'None'}\n` +
+        `Reference ID: ${refCode}`;
+
       payload = {
         ...payload,
-        subject: `New Health Insurance Inquiry: ${healthState.name || 'Visitor'} (${healthState.healthType})`,
-        replyto: healthState.email || undefined,
-        form_category: "Health Insurance",
-        full_name: healthState.name,
-        phone_number: healthState.phone,
-        email_address: healthState.email || 'N/A',
+        name: healthState.name,
+        email: healthState.email || undefined,
+        phone: healthState.phone,
+        message: summaryMessage,
+        subject: `New Health Insurance Inquiry: ${healthState.name} (${healthState.healthType})`,
         health_insurance_type: healthState.healthType,
         covered_adults: healthState.adults,
         covered_children: healthState.children,
@@ -560,22 +597,29 @@ Consent to Contact: ${corporateState.consent ? 'Yes' : 'No'}
         desired_sum_insured: healthState.sumInsured,
         inquiry_type: healthState.inquiryType,
         policy_expiry_date: healthState.expiryDate || 'N/A',
-        additional_requirements: healthState.requirements || 'None',
-        consent_given: healthState.consent ? 'Yes' : 'No'
+        additional_requirements: healthState.requirements || 'None'
       };
     } else {
+      const summaryMessage = 
+        `Inquiry Category: Loan Enquiry\n` +
+        `Full Name: ${corporateState.name}\n` +
+        `Company Name: ${corporateState.company || 'N/A'}\n` +
+        `Mobile Number: ${corporateState.phone}\n` +
+        `Email: ${corporateState.email || 'Not provided'}\n` +
+        `Loan Category: ${corporateState.service}\n` +
+        `Requirement Details: ${corporateState.requirement || 'None'}\n` +
+        `Reference ID: ${refCode}`;
+
       payload = {
         ...payload,
-        subject: `New Loan Enquiry: ${corporateState.name || 'Visitor'} (${corporateState.service})`,
-        replyto: corporateState.email || undefined,
-        form_category: "Loan Enquiry",
-        full_name: corporateState.name,
+        name: corporateState.name,
+        email: corporateState.email || undefined,
+        phone: corporateState.phone,
+        message: summaryMessage,
+        subject: `New Loan Enquiry: ${corporateState.name} (${corporateState.service})`,
         company_name: corporateState.company || 'N/A',
-        phone_number: corporateState.phone,
-        email_address: corporateState.email || 'N/A',
         service_category: corporateState.service,
-        loan_requirement: corporateState.requirement || 'None',
-        consent_given: corporateState.consent ? 'Yes' : 'No'
+        loan_requirement: corporateState.requirement || 'None'
       };
     }
 
