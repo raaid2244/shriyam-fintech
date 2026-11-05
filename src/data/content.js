@@ -1,9 +1,9 @@
-import { 
-  Building2, 
-  Briefcase, 
-  Landmark, 
-  ShieldCheck, 
-  TrendingUp, 
+import {
+  Building2,
+  Briefcase,
+  Landmark,
+  ShieldCheck,
+  TrendingUp,
   Globe,
   HeartPulse,
   Car,
@@ -18,7 +18,7 @@ export const companyDetails = {
   positioning: "Integrated Financial Solutions for Businesses, Professionals & Individuals",
   location: "Chennai, Tamil Nadu, India",
   phone: "8610389508",
-  email: "contact@shriyamfintech.com",
+  email: "enquiry@shriyamfintech.com",
   website: "www.shriyamfintech.com",
   copyright: "© 2026 Shriyam Fintech Pvt Ltd. All rights reserved."
 };
