@@ -354,8 +354,12 @@ const Contact = () => {
     FORM_TABS.some(t => t.id === paramTab) ? paramTab : 'general'
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [copied, setCopied] = useState(false);
   const [inquiryRef, setInquiryRef] = useState('');
+
+  const WEB3FORMS_ACCESS_KEY = "fdfbee6f-ac3c-43d9-b4c3-7c0b0f6cc98c";
 
   // 1. General Insurance Form State
   const [generalState, setGeneralState] = useState({
@@ -491,11 +495,113 @@ Consent to Contact: ${corporateState.consent ? 'Yes' : 'No'}
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError('');
+
     const refCode = `SF-${Math.floor(100000 + Math.random() * 900000)}`;
-    setInquiryRef(refCode);
-    setIsSubmitted(true);
+
+    let payload = {
+      access_key: WEB3FORMS_ACCESS_KEY,
+      from_name: "Shriyam Fintech Website",
+      reference_id: refCode
+    };
+
+    if (activeTab === 'general') {
+      payload = {
+        ...payload,
+        subject: `New General Insurance Inquiry: ${generalState.name || 'Visitor'} (${generalState.insuranceType})`,
+        replyto: generalState.email || undefined,
+        form_category: "General Insurance",
+        full_name: generalState.name,
+        phone_number: generalState.phone,
+        email_address: generalState.email || 'N/A',
+        customer_type: generalState.customerType,
+        company_name: generalState.company || 'N/A',
+        insurance_type_required: generalState.insuranceType,
+        approx_asset_value: generalState.assetValue,
+        inquiry_type: generalState.inquiryType,
+        policy_expiry_date: generalState.expiryDate || 'N/A',
+        additional_requirements: generalState.requirements || 'None',
+        consent_given: generalState.consent ? 'Yes' : 'No'
+      };
+    } else if (activeTab === 'life') {
+      payload = {
+        ...payload,
+        subject: `New Life Insurance Inquiry: ${lifeState.name || 'Visitor'} (${lifeState.requirement})`,
+        replyto: lifeState.email || undefined,
+        form_category: "Life Insurance",
+        full_name: lifeState.name,
+        phone_number: lifeState.phone,
+        email_address: lifeState.email || 'N/A',
+        age: lifeState.age,
+        occupation: lifeState.occupation,
+        life_insurance_requirement: lifeState.requirement,
+        desired_life_cover: lifeState.desiredCover,
+        annual_premium_budget: lifeState.budget,
+        primary_financial_goal: lifeState.financialGoal,
+        additional_details: lifeState.additionalDetails || 'None',
+        consent_given: lifeState.consent ? 'Yes' : 'No'
+      };
+    } else if (activeTab === 'health') {
+      payload = {
+        ...payload,
+        subject: `New Health Insurance Inquiry: ${healthState.name || 'Visitor'} (${healthState.healthType})`,
+        replyto: healthState.email || undefined,
+        form_category: "Health Insurance",
+        full_name: healthState.name,
+        phone_number: healthState.phone,
+        email_address: healthState.email || 'N/A',
+        health_insurance_type: healthState.healthType,
+        covered_adults: healthState.adults,
+        covered_children: healthState.children,
+        age_of_eldest_member: healthState.eldestAge || 'N/A',
+        desired_sum_insured: healthState.sumInsured,
+        inquiry_type: healthState.inquiryType,
+        policy_expiry_date: healthState.expiryDate || 'N/A',
+        additional_requirements: healthState.requirements || 'None',
+        consent_given: healthState.consent ? 'Yes' : 'No'
+      };
+    } else {
+      payload = {
+        ...payload,
+        subject: `New Loan Enquiry: ${corporateState.name || 'Visitor'} (${corporateState.service})`,
+        replyto: corporateState.email || undefined,
+        form_category: "Loan Enquiry",
+        full_name: corporateState.name,
+        company_name: corporateState.company || 'N/A',
+        phone_number: corporateState.phone,
+        email_address: corporateState.email || 'N/A',
+        service_category: corporateState.service,
+        loan_requirement: corporateState.requirement || 'None',
+        consent_given: corporateState.consent ? 'Yes' : 'No'
+      };
+    }
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setInquiryRef(refCode);
+        setIsSubmitted(true);
+      } else {
+        setSubmitError(data.message || "Failed to submit inquiry. Please try again or contact us directly.");
+      }
+    } catch {
+      setSubmitError("Network connection error. Please try again or contact us directly at 8610389508.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -1147,10 +1253,20 @@ Consent to Contact: ${corporateState.consent ? 'Yes' : 'No'}
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-4 pt-6 border-t border-white/20">
                         <button
                           type="submit"
-                          className="bg-[#06152F] text-white px-8 py-4 rounded-[4px] font-heading font-semibold text-[13px] tracking-[0.15em] uppercase flex items-center justify-center gap-3 hover:bg-white hover:text-[#06152F] transition-all duration-300 shadow-md group"
+                          disabled={isSubmitting}
+                          className="bg-[#06152F] text-white px-8 py-4 rounded-[4px] font-heading font-semibold text-[13px] tracking-[0.15em] uppercase flex items-center justify-center gap-3 hover:bg-white hover:text-[#06152F] disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300 shadow-md group"
                         >
-                          <span>SUBMIT INQUIRY</span>
-                          <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
+                          {isSubmitting ? (
+                            <>
+                              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                              <span>SENDING INQUIRY...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>SUBMIT INQUIRY</span>
+                              <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
+                            </>
+                          )}
                         </button>
 
                         <button
@@ -1171,6 +1287,12 @@ Consent to Contact: ${corporateState.consent ? 'Yes' : 'No'}
                           )}
                         </button>
                       </div>
+
+                      {submitError && (
+                        <div className="mt-4 p-3.5 rounded bg-red-950/60 border border-red-400/40 text-red-200 text-[13px] font-sans">
+                          {submitError}
+                        </div>
+                      )}
 
                     </form>
                   </motion.div>
